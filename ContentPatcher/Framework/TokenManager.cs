@@ -218,7 +218,7 @@ namespace ContentPatcher.Framework
             // world
             yield return new ConditionTypeValueProvider(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmType, this.GetFarmType, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => this.GetIsCommunityCenterComplete().ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsJojaMartComplete, () => this.GetIsJojaMartComplete().ToString(), NeedsBasicInfo);
             yield return new HavingChildValueProvider(ConditionType.Pregnant, NeedsBasicInfo);
@@ -278,6 +278,14 @@ namespace ContentPatcher.Framework
             return player.eventsSeen
                 .OrderBy(p => p)
                 .Select(id => id.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>Get the current farm type.</summary>
+        private IEnumerable<string> GetFarmType()
+        {
+            yield return Game1.whichFarm == Farm.mod_layout
+                ? Game1.whichModFarm?.ID ?? FarmType.Custom.ToString()
+                : this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString();
         }
 
         /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
