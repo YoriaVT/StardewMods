@@ -239,7 +239,7 @@ namespace ContentPatcher.Framework
             // metadata
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);
             yield return new HasValueValueProvider();
-            yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
+            yield return new ConditionTypeValueProvider(ConditionType.Language, () => this.GetLanguage(contentHelper));
         }
 
         /// <summary>Get the local value providers with which to initialize a local context.</summary>
@@ -291,6 +291,21 @@ namespace ContentPatcher.Framework
                 .Union(player.mailbox)
                 .Concat(Game1.worldStateIDs)
                 .OrderByHuman();
+        }
+
+        /// <summary>Get the current language code.</summary>
+        /// <param name="contentHelper">The content helper from which to get the locale.</param>
+        private IEnumerable<string> GetLanguage(IContentHelper contentHelper)
+        {
+            // get vanilla language
+            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
+            string code = language.ToString();
+
+            // handle custom language
+            if (language == LocalizedContentManager.LanguageCode.mod)
+                code = contentHelper.CurrentLocale ?? code;
+
+            yield return code;
         }
 
         /// <summary>Get the professions for the player.</summary>
