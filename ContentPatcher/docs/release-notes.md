@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Updated for Stardew Valley 1.5.5, including support for custom languages and custom farm types.
+* Updated for Stardew Valley 1.5.5 and SMAPI 3.13.0, including support for custom languages and custom farm types.
 * Refactored console command handling.
 
 ## 1.23.5
